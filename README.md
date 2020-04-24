@@ -3,10 +3,8 @@
 ## Overview
 
 This version of Bangazon implements the Identity framework, and extends the base User object with the `ApplicationUser` model.
-It shows how to remove a model's property from the automatic model binding in a controller method by using `ModelState.Remove()`.
 
 ## Setup
-
 
 > **Pick one person from your team to follow these steps. No one else should touch anything at this point.**
 
@@ -16,11 +14,11 @@ If your instructor chooses to use Github Classroom, you will all be given an inv
 
 1. The chosen person will click the link and create the team.
 2. Once that process is complete and the repository is created, everyone else joins their team.
-1. Notify your instructor that the repository is created so that your issue tickets can be generated.
-1. The chosen person will clone the team's repository to their machine. **No one else should**.
-1. Create a branch named `initial-setup`.
-1. Open Visual Studio and load the solution file
-1. Move on to the **Seeding the Database** section.
+3. Notify your instructor that the repository is created so that your issue tickets can be generated.
+4. The chosen person will clone the team's repository to their machine. **No one else should**.
+5. Create a branch named `initial-setup`.
+6. Open Visual Studio and load the solution file
+7. Move on to the **Seeding the Database** section.
 
 ### Option 2: Custom Organizations
 
@@ -28,10 +26,10 @@ If your instructor chooses to use Github Classroom, you will all be given an inv
 1. Create a new repository on your team's Github organization named `BangazonSite`.
 1. Copy the connection string for your repo.
 1. From your project directory, execute the following commands
-    ```sh
-    git remote remove origin
-    git remote add origin <paste your new Github URL here>
-    ```
+   ```sh
+   git remote remove origin
+   git remote add origin <paste your new Github URL here>
+   ```
 1. Push up the master branch to your new remote origin
 1. Create a branch named `initial-setup`.
 1. Open Visual Studio and load the solution file
@@ -148,14 +146,4 @@ public async Task<IActionResult> Types()
 
     return View(model);
 }
-```
-
-## Removing Items from Model Validation
-
-One of the features you must implement is allowing customers to add products to sell. You'll need to remove the user from model validation to get it to work. Here's an example of something your team will need to do in `Create()` method in **`ProductsController`**.
-
-```cs
-// Remove the user from the model validation because it is
-// not information posted in the form
-ModelState.Remove("product.User");
 ```
