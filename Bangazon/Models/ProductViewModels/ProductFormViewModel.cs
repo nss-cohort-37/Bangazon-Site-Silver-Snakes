@@ -41,6 +41,7 @@ namespace Bangazon.Models.ProductViewModels
         public string ImagePath { get; set; }
 
         public bool Active { get; set; }
+        [Required]
         public int ProductTypeId { get; set; }
         public List<SelectListItem> ProductTypeOptions { get; set; }
 
