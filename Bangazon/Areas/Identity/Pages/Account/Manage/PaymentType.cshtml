@@ -1,5 +1,5 @@
 ﻿@page
-@model Bangazon.Models.PaymentTypeModels.PaymentTypeCreateViewModel
+@model Bangazon.Models.PaymentType
 
 @{
     ViewData["Title"] = "Create";
@@ -30,7 +30,7 @@
                 <span asp-validation-for="AccountNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" asp-controller="PaymentTypes" asp-action="create"/>
+                <input type="submit" value="Create" class="btn btn-primary" asp-controller="PaymentTypes" asp-action="create" />
             </div>
         </form>
     </div>

@@ -40,21 +40,21 @@ namespace Bangazon.Controllers
         // GET: PaymentTypes/Create
         public ActionResult Create()
         {
-            var viewModel = new PaymentTypeCreateViewModel();
+            var viewModel = new PaymentType();
             return View(viewModel);
         }
 
         // POST: PaymentTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(PaymentTypeCreateViewModel PaymentTypeCreateViewModel)
+        public async Task<ActionResult> Create(PaymentType PaymentType)
         {
             try
             {
                 var paymentType = new PaymentType
                 {
-                    Description = PaymentTypeCreateViewModel.Description,
-                    AccountNumber = PaymentTypeCreateViewModel.AccountNumber
+                    Description = PaymentType.Description,
+                    AccountNumber = PaymentType.AccountNumber
                 };
                 var user = await GetCurrentUserAsync();
                 paymentType.UserId = user.Id;
