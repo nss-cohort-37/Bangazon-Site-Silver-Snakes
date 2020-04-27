@@ -67,15 +67,22 @@ namespace Bangazon.Controllers
                     Quantity = productViewModel.Quantity,
                     ProductTypeId = productViewModel.ProductTypeId
                 };
+             
 
                 _context.Product.Add(product);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+               var productTypes = await _context.ProductType
+                .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString() })
+                .ToListAsync();
+                productViewModel.ProductTypeOptions = productTypes;
+                ViewData["ErrorMessage"] = "Please Select a category.";
+                return View(productViewModel);
+ 
             }
         }
 
@@ -124,7 +131,10 @@ namespace Bangazon.Controllers
                 return View();
             }
         }
-        private async Task<ApplicationUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(HttpContext.User);
+        private async Task<Product> getProductById()
+        {
 
+        }
+        private async Task<ApplicationUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(HttpContext.User);
     }
 }

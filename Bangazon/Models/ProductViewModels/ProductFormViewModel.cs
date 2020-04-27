@@ -42,7 +42,9 @@ namespace Bangazon.Models.ProductViewModels
 
         public bool Active { get; set; }
         [Required]
+        [Display(Name = "Product Category")]
         public int ProductTypeId { get; set; }
+        [Required]
         public List<SelectListItem> ProductTypeOptions { get; set; }
 
     }
