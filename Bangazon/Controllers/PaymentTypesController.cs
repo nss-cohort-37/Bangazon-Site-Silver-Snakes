@@ -8,6 +8,7 @@ using Bangazon.Models.PaymentTypeModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bangazon.Controllers
 {
@@ -95,26 +96,33 @@ namespace Bangazon.Controllers
         }
 
         // GET: PaymentTypes/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var paymentType = await _context.PaymentType
+                .FirstOrDefaultAsync(pt => pt.PaymentTypeId == id);
+            if (paymentType == null)
+            {
+                return NotFound();
+            }
+
+            return View(paymentType);
+
         }
 
         // POST: PaymentTypes/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var paymentType = await _context.PaymentType.FindAsync(id);
+            _context.PaymentType.Remove(paymentType);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
