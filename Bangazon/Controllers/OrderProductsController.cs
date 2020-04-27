@@ -4,63 +4,41 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bangazon.Data;
 using Bangazon.Models;
-using Bangazon.Models.OrderViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bangazon.Controllers
 {
-    [Authorize]
-    public class OrdersController : Controller
+    public class OrderProductsController : Controller
     {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-    public OrdersController(ApplicationDbContext context, UserManager<ApplicationUser> usermanager)
-    {
-        _userManager = usermanager;
-        _context = context;
-    }
-        // GET: Orders
-        public async Task<ActionResult> Index()
-        { 
-            var user = await GetCurrentUserAsync();
-            var order = await _context.Order
-                .Where(o => o.UserId == user.Id)
-                .Include(u => user.PaymentTypes)
-                .Include(op => op.OrderProducts)
-                    .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(o => o.PaymentType == null);
-            var viewModel = new OrderDetailViewModel();
-            var lineItems = order.OrderProducts.Select(op => new OrderLineItem()
-            {
-                Product = op.Product,
-                Units = op.Product.Quantity,
-                Cost = op.Product.Price,
-            });
-            double totalCost = 0;
-            foreach(var item in lineItems)
-            {
-                totalCost += item.Cost;
-            }
-            viewModel.LineItems = lineItems;
-            viewModel.Total = totalCost;
-            return View(viewModel);
-        }
-
-        // GET: Orders/Details/5
-        public async  Task<ActionResult> Details()
+        public OrderProductsController(ApplicationDbContext context, UserManager<ApplicationUser> usermanager)
         {
-            
+            _userManager = usermanager;
+            _context = context;
+        }
+        // GET: OrderProducts
+        public ActionResult Index()
+        {
             return View();
         }
 
-    
+        // GET: OrderProducts/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
 
-        // POST: Orders/Create
+        // GET: OrderProducts/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
+
+        // POST: OrderProducts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Product product)
@@ -80,8 +58,8 @@ namespace Bangazon.Controllers
                 order.OrderProducts.Add(orderProduct);
                 _context.Order.Add(order);
                 await _context.SaveChangesAsync();
-           
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Orders");
             }
             catch
             {
@@ -89,13 +67,13 @@ namespace Bangazon.Controllers
             }
         }
 
-        // GET: Orders/Edit/5
+        // GET: OrderProducts/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Orders/Edit/5
+        // POST: OrderProducts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -112,13 +90,13 @@ namespace Bangazon.Controllers
             }
         }
 
-        // GET: Orders/Delete/5
+        // GET: OrderProducts/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Orders/Delete/5
+        // POST: OrderProducts/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
