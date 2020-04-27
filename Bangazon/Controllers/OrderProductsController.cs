@@ -41,7 +41,7 @@ namespace Bangazon.Controllers
         // POST: OrderProducts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Product product)
+        public async Task<ActionResult> Create(int id)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Bangazon.Controllers
                 };
                 var orderProduct = new OrderProduct
                 {
-                    ProductId = product.ProductId,
+                    ProductId = id,
                     OrderId = order.OrderId
                 };
                 order.OrderProducts.Add(orderProduct);

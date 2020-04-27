@@ -37,9 +37,6 @@
         </dd>
     </dl>
 </div>
-<p>
-    <form asp-controller="OrderProducts" asp-action="Create">
-    <input type="submit" class="btn btn-primary bg-primary border-primary" value="create">Add to order</input>
-
+    <form asp-controller="OrderProducts" asp-action="Create" asp-route-id="@Model.Id">
+        <input type="submit" class="btn btn-primary bg-primary border-primary" value="Add to order" />
     </form>
-</p>
