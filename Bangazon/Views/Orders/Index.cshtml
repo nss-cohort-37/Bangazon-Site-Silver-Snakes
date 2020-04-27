@@ -1,0 +1,44 @@
+﻿@model Bangazon.Models.OrderViewModels.OrderDetailViewModel
+
+@{ViewData["Title"] = "Index";}
+<h1>My shopping Cart</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Product
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var lineItem in Model.LineItems)
+        {
+            <tr>
+                <td>
+                    @lineItem.Product.Title
+                </td>
+                <td>
+                  IDK
+                </td>
+                <td>
+                    $@lineItem.Cost
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Total: @Model.Total </td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+<button class="btn btn-primary">Complete Order</button>
