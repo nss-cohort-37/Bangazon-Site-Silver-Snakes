@@ -26,9 +26,13 @@ namespace Bangazon.Controllers
             _context = context;
         }
         // GET: Products
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var products = await _context.Product
+                .Include(p => p.ProductType)
+                .ToListAsync();
+
+            return View(products);
         }
 
         // GET: Products/Details/5
