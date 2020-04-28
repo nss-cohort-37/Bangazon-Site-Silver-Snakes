@@ -31,5 +31,7 @@ namespace Bangazon.Models.PaymentTypeModels
         [Required]
         public ApplicationUser User { get; set; }
 
+        public List<PaymentType> PaymentTypes { get; set; }
+
     }
 }
