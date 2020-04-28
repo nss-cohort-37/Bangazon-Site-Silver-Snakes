@@ -67,7 +67,7 @@ namespace Bangazon.Controllers
             }
         }
 
-        // GET: OrderProducts/Edit/5
+        // GET: OrderProducts/Edit/5 
         public ActionResult Edit(int id)
         {
             return View();
