@@ -47,5 +47,7 @@ namespace Bangazon.Models.ProductViewModels
         [Required]
         public List<SelectListItem> ProductTypeOptions { get; set; }
 
+        public bool LocalDelivery { get; set; }
+
     }
 }

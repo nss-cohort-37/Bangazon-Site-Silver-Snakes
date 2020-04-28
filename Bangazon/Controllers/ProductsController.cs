@@ -32,7 +32,7 @@ namespace Bangazon.Controllers
         }
 
         // GET: Products/Details/5
-        public async  Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var product = await _context.Product.FirstOrDefaultAsync(p => p.ProductId == id);
             var viewModel = new ProductDetailViewModel()
@@ -50,7 +50,7 @@ namespace Bangazon.Controllers
         public async Task<ActionResult> Create()
         {
             var productTypes = await _context.ProductType
-                .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString()})
+                .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString() })
                 .ToListAsync();
             var viewmodel = new ProductFormViewModel();
             viewmodel.ProductTypeOptions = productTypes;
@@ -74,10 +74,15 @@ namespace Bangazon.Controllers
                     Description = productViewModel.Description,
                     UserId = user.Id,
                     Quantity = productViewModel.Quantity,
-                    ProductTypeId = productViewModel.ProductTypeId
+                    ProductTypeId = productViewModel.ProductTypeId,
+                    City = productViewModel.City
                 };
-             
 
+                if (productViewModel.LocalDelivery)
+                {
+                    product.City = productViewModel.City;
+                }
+          
                 _context.Product.Add(product);
                 await _context.SaveChangesAsync();
 
@@ -85,13 +90,13 @@ namespace Bangazon.Controllers
             }
             catch (Exception ex)
             {
-               var productTypes = await _context.ProductType
-                .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString() })
-                .ToListAsync();
+                var productTypes = await _context.ProductType
+                 .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString() })
+                 .ToListAsync();
                 productViewModel.ProductTypeOptions = productTypes;
                 ViewData["ErrorMessage"] = "Please Select a category.";
                 return View(productViewModel);
- 
+
             }
         }
 
