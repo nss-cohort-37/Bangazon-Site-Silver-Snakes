@@ -19,14 +19,14 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var lineItem in Model.LineItems)
+        @foreach (var lineItem in Model.LineItems)
         {
             <tr>
                 <td>
                     @lineItem.Product.Title
                 </td>
                 <td>
-                  1
+                    1
                 </td>
                 <td>
                     $@lineItem.Cost
@@ -41,4 +41,4 @@
         </tr>
     </tbody>
 </table>
-<button class="btn btn-primary">Complete Order</button>
+<button class="btn btn-outline-primary" >@Html.ActionLink("CHECKOUT", "Edit", new { id = Model.Order.OrderId }) </button>

@@ -32,11 +32,7 @@ namespace Bangazon.Controllers
             return View();
         }
 
-        // GET: OrderProducts/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+     
 
         // POST: OrderProducts/Create
         [HttpPost]
@@ -56,8 +52,25 @@ namespace Bangazon.Controllers
                     };
                     _context.OrderProduct.Add(newOrderProduct);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Orders");
                 }
+                else
+                {
+                    var newOrder = new Order
+                    {
+                        UserId = user.Id,
+                        DateCreated = DateTime.Now
+                    };
+                    _context.Order.Add(newOrder);
+                    var newOrderProduct = new OrderProduct
+                    {
+                        Order = newOrder,
+                        ProductId = id
+                    };
+                    _context.OrderProduct.Add(newOrderProduct);
+                    await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Orders");
+                }
             }
             catch(Exception ex)
             {

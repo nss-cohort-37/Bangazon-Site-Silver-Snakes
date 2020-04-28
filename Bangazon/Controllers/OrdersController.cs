@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bangazon.Controllers
@@ -33,7 +34,7 @@ namespace Bangazon.Controllers
                 .Include(u => user.PaymentTypes)
                 .Include(op => op.OrderProducts)
                     .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(o => o.PaymentType == null);
+                .FirstOrDefaultAsync(o => o.PaymentTypeId == null);
             if (order == null)
             {
                return RedirectToAction(nameof(CartEmpty));
@@ -42,6 +43,7 @@ namespace Bangazon.Controllers
             {
 
             var viewModel = new OrderDetailViewModel();
+            viewModel.Order = order;
             var lineItems = order.OrderProducts.Select(op => new OrderLineItem()
             {
                 Product = op.Product,
@@ -88,19 +90,36 @@ namespace Bangazon.Controllers
         }
 
         // GET: Orders/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var user = await GetCurrentUserAsync();
+            var order = await _context.Order.FirstOrDefaultAsync(o => o.OrderId == id);
+            var viewModel = new OrderEditViewModel();
+            viewModel.Order = order;
+            var paymentTypes = await _context.PaymentType
+                .Select(p => new SelectListItem { Text = p.Description, Value = p.PaymentTypeId.ToString() })
+                .ToListAsync();
+            viewModel.PaymentTypeOptions = paymentTypes;
+            viewModel.DateCreated = order.DateCreated;
+            return View(viewModel);
         }
 
         // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, OrderEditViewModel viewModel)
         {
             try
             {
-                // TODO: Add update logic here
+                var user = await GetCurrentUserAsync();
+                var dataModel = await _context.Order.FirstOrDefaultAsync(o => o.OrderId == id);
+                dataModel.DateCreated = viewModel.DateCreated;
+                dataModel.PaymentTypeId = viewModel.PaymentTypeId;
+                dataModel.UserId = user.Id;
+                dataModel.DateCompleted = DateTime.Now;
+
+                _context.Order.Update(dataModel);
+                await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
@@ -133,6 +152,5 @@ namespace Bangazon.Controllers
             }
         }
         private async Task<ApplicationUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(HttpContext.User);
-
     }
 }
