@@ -41,4 +41,7 @@
         </tr>
     </tbody>
 </table>
-<button class="btn btn-outline-primary" >@Html.ActionLink("CHECKOUT", "Edit", new { id = Model.Order.OrderId }) </button>
+<button class="btn btn-outline-success badge-success border-success" >@Html.ActionLink("CHECKOUT", "Edit", new { id = Model.Order.OrderId }) </button>
+<form asp-controller="Orders" asp-action="Delete" method="post">
+    <input type="submit" class="btn btn-danger bg-danger border-danger" value="Cancel Order" />
+</form>

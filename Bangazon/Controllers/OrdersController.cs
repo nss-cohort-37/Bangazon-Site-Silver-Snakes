@@ -96,7 +96,7 @@ namespace Bangazon.Controllers
             var order = await _context.Order.FirstOrDefaultAsync(o => o.OrderId == id);
             var viewModel = new OrderEditViewModel();
             viewModel.Order = order;
-            var paymentTypes = await _context.PaymentType
+            var paymentTypes = await _context.PaymentType.Where(p => p.UserId == user.Id)
                 .Select(p => new SelectListItem { Text = p.Description, Value = p.PaymentTypeId.ToString() })
                 .ToListAsync();
             viewModel.PaymentTypeOptions = paymentTypes;
@@ -129,26 +129,38 @@ namespace Bangazon.Controllers
             }
         }
 
-        // GET: Orders/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+    
 
         // POST: Orders/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete()
         {
             try
             {
+                var user =  await GetCurrentUserAsync();
+                var order = await _context.Order
+                .Where(o => o.UserId == user.Id).FirstOrDefaultAsync(o => o.PaymentType == null);
+
+                DeleteOrderProducts(order.OrderId);
+                _context.Order.Remove(order);
+                await _context.SaveChangesAsync();
+
                 // TODO: Add delete logic here
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
+            }
+        }   
+        private async void DeleteOrderProducts(int orderId)
+        {
+            var orderProducts = await _context.OrderProduct.Where(op => op.OrderId == orderId).ToListAsync();
+            foreach(var op in orderProducts)
+            {
+                _context.OrderProduct.Remove(op);
             }
         }
         private async Task<ApplicationUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(HttpContext.User);
