@@ -49,16 +49,28 @@ namespace Bangazon.Controllers
 
 
         // GET: ProductType/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var product = await _context.Product.FirstOrDefaultAsync(p => p.ProductId == id);
+            var viewModel = new ProductDetailViewModel()
+            {
+                Title = product.Title,
+                Description = product.Description,
+                Price = product.Price,
+                Quantity = product.Quantity
+            };
+            return View(viewModel);
         }
+
 
         // GET: ProductType/Create
         public ActionResult Create()
         {
             return View();
         }
+
+
+
 
         // POST: ProductType/Create
         [HttpPost]
