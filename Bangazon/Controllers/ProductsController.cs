@@ -45,6 +45,8 @@ namespace Bangazon.Controllers
             return View(viewModel);
         }
 
+
+
         // GET: Products/Create
         public async Task<ActionResult> Create()
         {

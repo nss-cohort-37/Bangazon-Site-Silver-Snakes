@@ -1,0 +1,20 @@
+﻿@model Bangazon.Models.ProductViewModels.ProductTypesViewModel
+@{
+    ViewData["Title"] = "Product Types";
+}
+<br />
+<h1>Product Types</h1>
+
+@foreach (var item in Model.Categories)
+{
+    <h4>@Html.DisplayFor(modelItem => item.CategoryName) (@item.ProductCount)</h4>
+    <ul>
+        @foreach (var product in item.Products)
+        {
+            <li>@Html.DisplayFor(modelItem => product.Title)</li>
+        }
+    </ul>
+
+
+}
+
