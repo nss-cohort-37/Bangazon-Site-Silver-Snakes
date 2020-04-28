@@ -26,14 +26,34 @@ namespace Bangazon.Controllers
             _context = context;
         }
         // GET: Products
-        public async Task<ActionResult> Index(string searchString)
+        public async Task<ActionResult> Index(string searchString, string citySearchString)
         {
-            var products = await _context.Product
-                .Where(p => p.Title.Contains(searchString))
-                .Include(p => p.ProductType)
-                .ToListAsync();
+            if (searchString != null)
+            {
+                var products = await _context.Product
+                    .Where(p => p.Title.Contains(searchString))
+                    .Include(p => p.ProductType)
+                    .ToListAsync();
 
-            return View(products);
+                return View(products);
+            }
+            else if (citySearchString != null)
+            {
+                var products = await _context.Product
+                    .Where(p => p.City == citySearchString)
+                    .Include(p => p.ProductType)
+                    .ToListAsync();
+
+                return View(products);
+            }
+            else
+            {
+                var products = await _context.Product
+                    .Include(p => p.ProductType)
+                    .ToListAsync();
+
+                return View(products);
+            }
         }
 
         // GET: Products/Details/5
@@ -89,7 +109,7 @@ namespace Bangazon.Controllers
                 {
                     product.City = productViewModel.City;
                 }
-          
+
                 _context.Product.Add(product);
                 await _context.SaveChangesAsync();
 
