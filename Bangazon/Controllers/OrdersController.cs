@@ -34,6 +34,13 @@ namespace Bangazon.Controllers
                 .Include(op => op.OrderProducts)
                     .ThenInclude(p => p.Product)
                 .FirstOrDefaultAsync(o => o.PaymentType == null);
+            if (order == null)
+            {
+               return RedirectToAction(nameof(CartEmpty));
+            }
+            else
+            {
+
             var viewModel = new OrderDetailViewModel();
             var lineItems = order.OrderProducts.Select(op => new OrderLineItem()
             {
@@ -49,39 +56,30 @@ namespace Bangazon.Controllers
             viewModel.LineItems = lineItems;
             viewModel.Total = totalCost;
             return View(viewModel);
+            }
         }
 
+        public ActionResult CartEmpty()
+        {
+            return View();
+        }
         // GET: Orders/Details/5
-        public async  Task<ActionResult> Details()
+        public async Task<ActionResult> Details()
         {
             
             return View();
         }
 
     
-
         // POST: Orders/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Product product)
+        public ActionResult Create(IFormCollection collection)
         {
             try
             {
-                var user = await GetCurrentUserAsync();
-                var order = new Order
-                {
-                    UserId = user.Id,
-                };
-                var orderProduct = new OrderProduct
-                {
-                    ProductId = product.ProductId,
-                    OrderId = order.OrderId
-                };
-                order.OrderProducts.Add(orderProduct);
-                _context.Order.Add(order);
-                await _context.SaveChangesAsync();
-           
                 return RedirectToAction(nameof(Index));
+
             }
             catch
             {

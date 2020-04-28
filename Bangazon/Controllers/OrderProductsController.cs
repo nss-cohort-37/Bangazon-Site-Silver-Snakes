@@ -46,22 +46,20 @@ namespace Bangazon.Controllers
             try
             {
                 var user = await GetCurrentUserAsync();
-                var order = new Order
+                var userOpenOrder = _context.Order.Where(o => o.UserId == user.Id).FirstOrDefault(o => o.PaymentTypeId == null);
+                if (userOpenOrder != null)
                 {
-                    UserId = user.Id,
-                };
-                var orderProduct = new OrderProduct
-                {
-                    ProductId = id,
-                    OrderId = order.OrderId
-                };
-                order.OrderProducts.Add(orderProduct);
-                _context.Order.Add(order);
-                await _context.SaveChangesAsync();
-
+                    var newOrderProduct = new OrderProduct
+                    {
+                        OrderId = userOpenOrder.OrderId,
+                        ProductId = id
+                    };
+                    _context.OrderProduct.Add(newOrderProduct);
+                    await _context.SaveChangesAsync();
+                }
                 return RedirectToAction("Index", "Orders");
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }
