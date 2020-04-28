@@ -26,9 +26,10 @@ namespace Bangazon.Controllers
             _context = context;
         }
         // GET: Products
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string searchString)
         {
             var products = await _context.Product
+                .Where(p => p.Title.Contains(searchString))
                 .Include(p => p.ProductType)
                 .ToListAsync();
 
