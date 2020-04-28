@@ -37,6 +37,7 @@ namespace Bangazon.Controllers
             var product = await _context.Product.FirstOrDefaultAsync(p => p.ProductId == id);
             var viewModel = new ProductDetailViewModel()
             {
+                Id = product.ProductId,
                 Title = product.Title,
                 Description = product.Description,
                 Price = product.Price,
