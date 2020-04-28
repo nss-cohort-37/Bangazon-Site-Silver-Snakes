@@ -5,7 +5,7 @@
 }
 @if (ViewData.ContainsKey("ErrorMessage"))
 {
-<div class="alert alert-danger">@ViewData["ErrorMessage"]</div>
+    <div class="alert alert-danger">@ViewData["ErrorMessage"]</div>
 }
 
 <h1>Create</h1>
@@ -46,6 +46,15 @@
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LocalDelivery">Is local delivery available?</label><br>
+                <input id="local-delivery-checkbox" asp-for="LocalDelivery" type="checkbox" class="form-control" value="true">
+            </div>
+            <div class="form-group hidden" id="city-input">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
