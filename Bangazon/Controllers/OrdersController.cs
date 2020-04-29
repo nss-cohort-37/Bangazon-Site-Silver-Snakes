@@ -35,7 +35,8 @@ namespace Bangazon.Controllers
                 .Include(op => op.OrderProducts)
                     .ThenInclude(p => p.Product)
                 .FirstOrDefaultAsync(o => o.PaymentTypeId == null);
-            if (order == null)
+           var orderProducts = await _context.OrderProduct.Where(op => op.OrderId == order.OrderId).ToListAsync();
+            if (order == null || orderProducts.Count < 1)
             {
                return RedirectToAction(nameof(CartEmpty));
             }

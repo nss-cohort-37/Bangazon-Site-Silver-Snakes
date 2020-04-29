@@ -111,11 +111,6 @@ namespace Bangazon.Controllers
                 var orderProduct = _context.OrderProduct.FirstOrDefault(op => op.ProductId == id);
                 _context.OrderProduct.Remove(orderProduct);
                 await _context.SaveChangesAsync();
-                // TODO: Add delete logic here
-                //if (order == null)
-                //{
-                //    return RedirectToAction(nameof(CartEmpty));
-                //}
                 return RedirectToAction("Index", "Orders");
             }
             catch
