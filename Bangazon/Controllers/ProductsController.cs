@@ -26,7 +26,7 @@ namespace Bangazon.Controllers
             _context = context;
         }
         // GET: Products
-        public async Task<ActionResult> Index(string searchString, string citySearchString)
+        public async Task<ActionResult> Index(string searchString, string citySearchString, bool myProducts)
         {
             if (searchString != null)
             {
@@ -41,6 +41,17 @@ namespace Bangazon.Controllers
             {
                 var products = await _context.Product
                     .Where(p => p.City == citySearchString)
+                    .Include(p => p.ProductType)
+                    .ToListAsync();
+
+                return View(products);
+            }
+            else if (myProducts == true)
+            {
+                var user = await GetCurrentUserAsync();
+
+                var products = await _context.Product
+                    .Where(p => p.UserId == user.Id)
                     .Include(p => p.ProductType)
                     .ToListAsync();
 
@@ -170,7 +181,7 @@ namespace Bangazon.Controllers
                 TempData["deleteSuccessful"] = "Your product has been deleted";
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["DeleteUnsuccessful"] = "This product is being purchase and cannot be deleted";
                 var myProduct = await _context.Product.Include(p => p.ProductType).FirstOrDefaultAsync(p => p.ProductId == id);
