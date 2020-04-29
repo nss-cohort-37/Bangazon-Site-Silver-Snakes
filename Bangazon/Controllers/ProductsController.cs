@@ -160,17 +160,21 @@ namespace Bangazon.Controllers
         // POST: Products/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, Product product)
         {
             try
             {
-                // TODO: Add delete logic here
-
+                var myProduct = await _context.Product.FirstOrDefaultAsync(p => p.ProductId == id);
+                _context.Remove(myProduct);
+                await _context.SaveChangesAsync();
+                TempData["deleteSuccessful"] = "Your product has been deleted";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                TempData["DeleteUnsuccessful"] = "This product is being purchase and cannot be deleted";
+                var myProduct = await _context.Product.Include(p => p.ProductType).FirstOrDefaultAsync(p => p.ProductId == id);
+                return View(myProduct);
             }
         }
         private async Task<ApplicationUser> GetCurrentUserAsync() => await _userManager.GetUserAsync(HttpContext.User);

@@ -14,6 +14,10 @@
 {
     <div class="alert alert-success">@TempData["orderConfirmed"]</div>
 }
+@if (TempData.ContainsKey("deleteSuccessful"))
+{
+    <div class="alert alert-danger">@TempData["deleteSuccessful"]</div>
+}
 <table class="table">
     <thead>
         <tr>
@@ -55,10 +59,10 @@
                     @Html.DisplayFor(modelItem => item.ProductType.Label)
                 </td>
                 <td>
-                        @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-                        @Html.ActionLink("Delete", "Delete", new {  id=item.ProductId })
-                    </td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+                </td>
             </tr>
         }
     </tbody>
