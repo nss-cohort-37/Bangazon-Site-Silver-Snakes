@@ -101,22 +101,17 @@ namespace Bangazon.Controllers
             }
         }
 
-        // GET: OrderProducts/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: OrderProducts/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                var orderProduct = _context.OrderProduct.FirstOrDefault(op => op.ProductId == id);
+                _context.OrderProduct.Remove(orderProduct);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Orders");
             }
             catch
             {
