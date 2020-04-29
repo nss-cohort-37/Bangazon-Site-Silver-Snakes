@@ -19,5 +19,9 @@ namespace Bangazon.Models.ProfileViewModels
         [Required]
         public string StreetAddress { get; set; }
 
+        [Required]
+        public string PhoneNumber { get; set; }
+
+
     }
 }

@@ -38,7 +38,8 @@ namespace Bangazon.Controllers
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                StreetAddress = user.StreetAddress
+                StreetAddress = user.StreetAddress,
+                PhoneNumber = user.PhoneNumber
             };
             return View(viewModel);
         }
@@ -82,7 +83,8 @@ namespace Bangazon.Controllers
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                StreetAddress = user.StreetAddress
+                StreetAddress = user.StreetAddress,
+                PhoneNumber = user.PhoneNumber
             };
             return View(viewModel);
         }
@@ -100,9 +102,7 @@ namespace Bangazon.Controllers
                 user.FirstName = profileViewModel.FirstName;
                 user.LastName = profileViewModel.LastName;
                 user.StreetAddress = profileViewModel.StreetAddress;
-
-
-
+                user.PhoneNumber = profileViewModel.PhoneNumber;
 
                 _context.ApplicationUsers.Update(user);
                 await _context.SaveChangesAsync();
