@@ -4,7 +4,6 @@
 // Write your JavaScript code.
 
 
-
 function clickListener() {
     document.querySelector("#local-delivery-checkbox").addEventListener(
         "click",
