@@ -65,12 +65,7 @@ namespace Bangazon.Controllers
         {
             return View();
         }
-        // GET: Orders/Details/5
-        public async Task<ActionResult> Details()
-        {
-            
-            return View();
-        }
+   
 
     
         // POST: Orders/Create
@@ -129,8 +124,6 @@ namespace Bangazon.Controllers
                 return View();
             }
         }
-
-    
 
         // POST: Orders/Delete/5
         [HttpPost]

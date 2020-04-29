@@ -31,6 +31,11 @@
                 <td>
                     $@lineItem.Cost
                 </td>
+                <td>
+                    <form asp-controller="OrderProducts" asp-action="Delete" asp-route-Id="@lineItem.Product.ProductId" method="post">
+                        <input type="submit" class="btn btn-danger bg-danger border-danger" value="DELETE" />
+                    </form>
+                </td>
             </tr>
         }
         <tr>
