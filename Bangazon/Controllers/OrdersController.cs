@@ -121,7 +121,8 @@ namespace Bangazon.Controllers
                 _context.Order.Update(dataModel);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                TempData["orderConfirmed"] = "Your order has been processed. Thanks for shopping.";
+                return RedirectToAction("Index", "Products");
             }
             catch
             {
@@ -147,8 +148,8 @@ namespace Bangazon.Controllers
                 await _context.SaveChangesAsync();
 
                 // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                TempData["cancelOrder"] = "Your order has been canceled.";
+                return RedirectToAction("Index", "Products");
             }
             catch(Exception ex)
             {
