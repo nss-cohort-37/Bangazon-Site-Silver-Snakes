@@ -151,9 +151,10 @@ namespace Bangazon.Controllers
         }
 
         // GET: Products/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var product = await _context.Product.Include(p => p.ProductType).FirstOrDefaultAsync(p => p.ProductId == id);
+            return View(product);
         }
 
         // POST: Products/Delete/5
