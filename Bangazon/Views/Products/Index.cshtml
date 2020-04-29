@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<Bangazon.Models.Product>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Index";
@@ -61,7 +63,11 @@
                 <td>
                     @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+                    @if (item.UserId == )
+                    {
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+
+                    }
                 </td>
             </tr>
         }
