@@ -35,7 +35,8 @@ namespace Bangazon.Controllers
                 .Include(op => op.OrderProducts)
                     .ThenInclude(p => p.Product)
                 .FirstOrDefaultAsync(o => o.PaymentTypeId == null);
-            if (order == null)
+           var orderProducts = await _context.OrderProduct.Where(op => op.OrderId == order.OrderId).ToListAsync();
+            if (order == null || orderProducts.Count < 1)
             {
                return RedirectToAction(nameof(CartEmpty));
             }
@@ -65,12 +66,7 @@ namespace Bangazon.Controllers
         {
             return View();
         }
-        // GET: Orders/Details/5
-        public async Task<ActionResult> Details()
-        {
-            
-            return View();
-        }
+   
 
     
         // POST: Orders/Create
@@ -121,15 +117,14 @@ namespace Bangazon.Controllers
                 _context.Order.Update(dataModel);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                TempData["orderConfirmed"] = "Your order has been processed. Thanks for shopping.";
+                return RedirectToAction("Index", "Products");
             }
             catch
             {
                 return View();
             }
         }
-
-    
 
         // POST: Orders/Delete/5
         [HttpPost]
@@ -147,8 +142,8 @@ namespace Bangazon.Controllers
                 await _context.SaveChangesAsync();
 
                 // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                TempData["cancelOrder"] = "Your order has been canceled.";
+                return RedirectToAction("Index", "Products");
             }
             catch(Exception ex)
             {
