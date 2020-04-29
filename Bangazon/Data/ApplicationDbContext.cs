@@ -5,6 +5,7 @@ using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Bangazon.Models.ProductViewModels;
 
 namespace Bangazon.Data {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
@@ -213,5 +214,8 @@ namespace Bangazon.Data {
                 }
             );
         }
+
+        public DbSet<Bangazon.Models.ProductViewModels.ProductDetailViewModel> ProductDetailViewModel { get; set; }
+
     }
 }

@@ -26,17 +26,43 @@ namespace Bangazon.Controllers
             _context = context;
         }
         // GET: Products
-        public ActionResult Index()
+        public async Task<ActionResult> Index(string searchString, string citySearchString)
         {
-            return View();
+            if (searchString != null)
+            {
+                var products = await _context.Product
+                    .Where(p => p.Title.Contains(searchString))
+                    .Include(p => p.ProductType)
+                    .ToListAsync();
+
+                return View(products);
+            }
+            else if (citySearchString != null)
+            {
+                var products = await _context.Product
+                    .Where(p => p.City == citySearchString)
+                    .Include(p => p.ProductType)
+                    .ToListAsync();
+
+                return View(products);
+            }
+            else
+            {
+                var products = await _context.Product
+                    .Include(p => p.ProductType)
+                    .ToListAsync();
+
+                return View(products);
+            }
         }
 
         // GET: Products/Details/5
-        public async  Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var product = await _context.Product.FirstOrDefaultAsync(p => p.ProductId == id);
             var viewModel = new ProductDetailViewModel()
             {
+                Id = product.ProductId,
                 Title = product.Title,
                 Description = product.Description,
                 Price = product.Price,
@@ -45,11 +71,13 @@ namespace Bangazon.Controllers
             return View(viewModel);
         }
 
+
+
         // GET: Products/Create
         public async Task<ActionResult> Create()
         {
             var productTypes = await _context.ProductType
-                .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString()})
+                .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString() })
                 .ToListAsync();
             var viewmodel = new ProductFormViewModel();
             viewmodel.ProductTypeOptions = productTypes;
@@ -73,9 +101,14 @@ namespace Bangazon.Controllers
                     Description = productViewModel.Description,
                     UserId = user.Id,
                     Quantity = productViewModel.Quantity,
-                    ProductTypeId = productViewModel.ProductTypeId
+                    ProductTypeId = productViewModel.ProductTypeId,
+                    City = productViewModel.City
                 };
-             
+
+                if (productViewModel.LocalDelivery)
+                {
+                    product.City = productViewModel.City;
+                }
 
                 _context.Product.Add(product);
                 await _context.SaveChangesAsync();
@@ -84,13 +117,13 @@ namespace Bangazon.Controllers
             }
             catch (Exception ex)
             {
-               var productTypes = await _context.ProductType
-                .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString() })
-                .ToListAsync();
+                var productTypes = await _context.ProductType
+                 .Select(p => new SelectListItem() { Text = p.Label, Value = p.ProductTypeId.ToString() })
+                 .ToListAsync();
                 productViewModel.ProductTypeOptions = productTypes;
                 ViewData["ErrorMessage"] = "Please Select a category.";
                 return View(productViewModel);
- 
+
             }
         }
 
