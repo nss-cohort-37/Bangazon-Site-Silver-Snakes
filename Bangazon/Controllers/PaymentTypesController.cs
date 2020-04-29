@@ -26,6 +26,7 @@ namespace Bangazon.Controllers
         public async Task<ActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
+            
             var paymentTypes = _context.PaymentType
                 .Where(pt => pt.UserId == user.Id);
             return View(paymentTypes);
@@ -38,9 +39,14 @@ namespace Bangazon.Controllers
         }
 
         // GET: PaymentTypes/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            var viewModel = new PaymentType();
+            var user = await GetCurrentUserAsync();
+            var paymentTypes = await _context.PaymentType
+               .Where(pt => pt.UserId == user.Id).ToListAsync();
+
+            var viewModel = new PaymentTypeCreateViewModel();
+            viewModel.PaymentTypes = paymentTypes;
             return View(viewModel);
         }
 
@@ -64,7 +70,7 @@ namespace Bangazon.Controllers
 
                 // TODO: Add insert logic here
 
-                return RedirectToAction(nameof(Index));
+                return  RedirectToPage("/Account/Manage/PaymentType", new { area = "Identity" });
             }
             catch
             {
@@ -122,7 +128,7 @@ namespace Bangazon.Controllers
             var paymentType = await _context.PaymentType.FindAsync(id);
             _context.PaymentType.Remove(paymentType);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToPage("/Account/Manage/PaymentType", new { area = "Identity" });
         }
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
